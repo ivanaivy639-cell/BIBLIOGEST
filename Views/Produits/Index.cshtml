@@ -1,0 +1,91 @@
+@model GestionProduits.Models.ProductListViewModels
+@{
+    ViewData["Title"] = "Produits";
+    ViewData["BodyClass"] = "products-page";
+}
+
+<section class="products-toolbar panel-card">
+    <div>
+        <h2 class="products-heading">Catalogue Produits</h2>
+        <p class="products-subtitle">Gestion rapide et suivi des stocks.</p>
+    </div>
+    <div class="products-toolbar-actions">
+        <a class="btn btn-outline-light" asp-action="AdvancedSearch">Rechercher</a>
+        <a class="btn btn-secondary" asp-action="Create">Ajouter produit</a>
+    </div>
+</section>
+
+<section class="products-stats-grid">
+    <article class="stat-chip">
+        <span class="chip-label">Total produits</span>
+        <strong class="chip-value">@Model.TotalProduits</strong>
+    </article>
+    <article class="stat-chip">
+        <span class="chip-label">Stock total</span>
+        <strong class="chip-value">@Model.StockTotal</strong>
+    </article>
+    <article class="stat-chip">
+        <span class="chip-label">Stock faible</span>
+        <strong class="chip-value">@Model.ProduitsStockFaible</strong>
+    </article>
+    <article class="stat-chip">
+        <span class="chip-label">Categories</span>
+        <strong class="chip-value">@Model.NombreCategories</strong>
+    </article>
+</section>
+
+<section class="panel-card products-table-panel">
+    <h2 class="advanced-title">Produits disponibles <span class="result-count">(@Model.Products.Count() elements)</span></h2>
+    <div class="table-responsive">
+        <table class="table table-dashboard products-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Auteur</th>
+                    <th>ISBN</th>
+                    <th>Categorie</th>
+                    <th>Prix</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Products)
+                {
+                    var stockClass = item.QuantiteStock == 0 ? "danger" : item.QuantiteStock <= 10 ? "warn" : "ok";
+                    <tr>
+                        <td class="name-cell">@item.Nom</td>
+                        <td>@item.Auteur</td>
+                        <td class="isbn-cell">@item.ISBN</td>
+                        <td>@item.Categorie</td>
+                        <td>@item.Prix.ToString("N0") FCFA</td>
+                        <td><span class="stock-badge @stockClass">@item.QuantiteStock (@item.StatutStock)</span></td>
+                        <td class="action-cell">
+                            <a class="icon-action-btn icon-details" asp-action="Details" asp-route-id="@item.Id" title="Details" aria-label="Details">
+                                <svg viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM8 12.5A4.5 4.5 0 1 1 8 3a4.5 4.5 0 0 1 0 9.5z"></path>
+                                    <path d="M8 10.5A2.5 2.5 0 1 0 8 5a2.5 2.5 0 0 0 0 5.5z"></path>
+                                </svg>
+                                <span class="visually-hidden">Details</span>
+                            </a>
+                            <a class="icon-action-btn icon-edit" asp-action="Edit" asp-route-id="@item.Id" title="Modifier" aria-label="Modifier">
+                                <svg viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M12.146 0.854a.5.5 0 0 1 .708 0l2.292 2.292a.5.5 0 0 1 0 .708l-9.5 9.5L3 14l.646-2.646 9.5-9.5z"></path>
+                                    <path d="M1 15h14v1H0v-1h1z"></path>
+                                </svg>
+                                <span class="visually-hidden">Modifier</span>
+                            </a>
+                            <a class="icon-action-btn icon-delete" asp-action="Delete" asp-route-id="@item.Id" title="Supprimer" aria-label="Supprimer">
+                                <svg viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M5.5 5.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z"></path>
+                                    <path d="M14.5 3h-3V1.5A1.5 1.5 0 0 0 10 0h-4a1.5 1.5 0 0 0-1.5 1.5V3h-3a.5.5 0 0 0 0 1H2l.8 10.4A1.8 1.8 0 0 0 4.6 16h6.8a1.8 1.8 0 0 0 1.8-1.6L14 4h.5a.5.5 0 0 0 0-1zM6 1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V3H6V1.5z"></path>
+                                </svg>
+                                <span class="visually-hidden">Supprimer</span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

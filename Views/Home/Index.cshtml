@@ -1,0 +1,36 @@
+@model BIBLIOGEST.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Tableau de Bord";
+    ViewData["BodyClass"] = "dashboard-page";
+}
+
+<section class="stats-grid dashboard-stats-grid">
+    <article class="kpi-card">
+        <div class="kpi-icon rose"><span class="kpi-glyph">B</span></div>
+        <div>
+            <p class="kpi-value">@Model.TotalProduits</p>
+            <p class="kpi-label">Total Produits</p>
+        </div>
+    </article>
+    <article class="kpi-card">
+        <div class="kpi-icon green"><span class="kpi-glyph">S</span></div>
+        <div>
+            <p class="kpi-value">@Model.StockTotal</p>
+            <p class="kpi-label">Stock Total</p>
+        </div>
+    </article>
+    <article class="kpi-card">
+        <div class="kpi-icon yellow"><span class="kpi-glyph">!</span></div>
+        <div>
+            <p class="kpi-value">@Model.ProduitsStockFaible</p>
+            <p class="kpi-label">Stock Faible</p>
+        </div>
+    </article>
+    <article class="kpi-card">
+        <div class="kpi-icon soft"><span class="kpi-glyph">C</span></div>
+        <div>
+            <p class="kpi-value">@Model.NombreCategories</p>
+            <p class="kpi-label">Categories</p>
+        </div>
+    </article>
+</section>

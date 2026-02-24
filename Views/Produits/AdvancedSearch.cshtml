@@ -1,0 +1,128 @@
+@model GestionProduits.Models.ProductListViewModels
+@{
+    ViewData["Title"] = "Recherche Avancee";
+}
+
+<section class="panel-card advanced-search-panel">
+    <h2 class="advanced-title">Recherche Avancee</h2>
+    <form asp-action="AdvancedSearch" method="get" class="advanced-form-grid">
+        <div>
+            <label class="field-label" for="searchTerm">Titre</label>
+            <input id="searchTerm" class="form-control" name="searchTerm" value="@Model.SearchTerm" placeholder="Titre du livre..." />
+        </div>
+        <div>
+            <label class="field-label" for="searchAuteur">Auteur</label>
+            <input id="searchAuteur" class="form-control" name="searchAuteur" value="@Model.SearchAuteur" placeholder="Nom de l'auteur..." />
+        </div>
+        <div>
+            <label class="field-label" for="searchISBN">ISBN</label>
+            <input id="searchISBN" class="form-control" name="searchISBN" value="@Model.SearchISBN" placeholder="Code ISBN..." />
+        </div>
+
+        <div>
+            <label class="field-label" for="selectedCategory">Categorie</label>
+            <select id="selectedCategory" class="form-select" name="selectedCategory">
+                <option value="">Toutes les categories</option>
+                @if (Model.Categories is not null)
+                {
+                    foreach (var c in Model.Categories)
+                    {
+                        if (c.Value == Model.SelectedCategory)
+                        {
+                            <option value="@c.Value" selected>@c.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@c.Value">@c.Text</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+        <div>
+            <label class="field-label" for="prixMin">Prix Min (FCFA)</label>
+            <input id="prixMin" class="form-control" type="number" min="0" step="1" name="prixMin" value="@Model.PrixMin" />
+        </div>
+        <div>
+            <label class="field-label" for="prixMax">Prix Max (FCFA)</label>
+            <input id="prixMax" class="form-control" type="number" min="0" step="1" name="prixMax" value="@Model.PrixMax" />
+        </div>
+        <div>
+            <label class="field-label" for="disponibilite">Disponibilite</label>
+            <select id="disponibilite" class="form-select" name="disponibilite">
+                <option value="">Tous</option>
+                <option value="Disponible" selected="@(Model.Disponibilite == "Disponible")">Disponible</option>
+                <option value="Faible" selected="@(Model.Disponibilite == "Faible")">Stock faible</option>
+                <option value="Rupture" selected="@(Model.Disponibilite == "Rupture")">Rupture</option>
+            </select>
+        </div>
+        <div class="wide-field">
+            <label class="field-label" for="sortOrder">Trier par</label>
+            <select id="sortOrder" class="form-select" name="sortOrder">
+                <option value="NomAsc" selected="@(Model.SortOrder == "NomAsc")">Nom (A-Z)</option>
+                <option value="NomDesc" selected="@(Model.SortOrder == "NomDesc")">Nom (Z-A)</option>
+                <option value="PrixAsc" selected="@(Model.SortOrder == "PrixAsc")">Prix croissant</option>
+                <option value="PrixDesc" selected="@(Model.SortOrder == "PrixDesc")">Prix decroissant</option>
+                <option value="StockAsc" selected="@(Model.SortOrder == "StockAsc")">Stock croissant</option>
+                <option value="StockDesc" selected="@(Model.SortOrder == "StockDesc")">Stock decroissant</option>
+            </select>
+        </div>
+
+        <div class="advanced-actions">
+            <button class="btn btn-secondary" type="submit">Rechercher</button>
+            <a class="btn btn-outline-light" asp-action="AdvancedSearch">Reinitialiser</a>
+        </div>
+    </form>
+</section>
+
+<section class="panel-card">
+    <h2 class="advanced-title">Resultats de Recherche <span class="result-count">(@Model.Products.Count() resultats)</span></h2>
+    <div class="table-responsive">
+        <table class="table table-dashboard">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Auteur</th>
+                    <th>ISBN</th>
+                    <th>Categorie</th>
+                    <th>Prix</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td>@item.Nom</td>
+                        <td>@item.Auteur</td>
+                        <td>@item.ISBN</td>
+                        <td>@item.Categorie</td>
+                        <td>@item.Prix.ToString("N0") FCFA</td>
+                        <td>@item.QuantiteStock</td>
+                        <td class="action-cell">
+                            <a class="icon-action-btn icon-details" asp-action="Details" asp-route-id="@item.Id" title="Details" aria-label="Details">
+                                <svg viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM8 12.5A4.5 4.5 0 1 1 8 3a4.5 4.5 0 0 1 0 9.5z"></path>
+                                    <path d="M8 10.5A2.5 2.5 0 1 0 8 5a2.5 2.5 0 0 0 0 5.5z"></path>
+                                </svg>
+                            </a>
+                            <a class="icon-action-btn icon-edit" asp-action="Edit" asp-route-id="@item.Id" title="Modifier" aria-label="Modifier">
+                                <svg viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M12.146 0.854a.5.5 0 0 1 .708 0l2.292 2.292a.5.5 0 0 1 0 .708l-9.5 9.5L3 14l.646-2.646 9.5-9.5z"></path>
+                                    <path d="M1 15h14v1H0v-1h1z"></path>
+                                </svg>
+                            </a>
+                            <a class="icon-action-btn icon-delete" asp-action="Delete" asp-route-id="@item.Id" title="Supprimer" aria-label="Supprimer">
+                                <svg viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M5.5 5.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z"></path>
+                                    <path d="M14.5 3h-3V1.5A1.5 1.5 0 0 0 10 0h-4a1.5 1.5 0 0 0-1.5 1.5V3h-3a.5.5 0 0 0 0 1H2l.8 10.4A1.8 1.8 0 0 0 4.6 16h6.8a1.8 1.8 0 0 0 1.8-1.6L14 4h.5a.5.5 0 0 0 0-1zM6 1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V3H6V1.5z"></path>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

@@ -1,0 +1,74 @@
+@{
+    var currentController = (ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty).ToLowerInvariant();
+    var currentAction = (ViewContext.RouteData.Values["action"]?.ToString() ?? string.Empty).ToLowerInvariant();
+    var bodyClass = (ViewData["BodyClass"]?.ToString() ?? string.Empty).Trim();
+    var productsNavActive = currentController == "produits" && (currentAction == "index" || currentAction == "advancedsearch");
+}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BIBLIOGEST</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="@bodyClass">
+    <div class="app-layout" id="appLayout">
+        <aside class="app-sidebar">
+            <div class="sidebar-brand">
+                <button type="button" class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Basculer la barre laterale">☰</button>
+                <span class="brand-text">BiblioGest</span>
+            </div>
+
+            <div class="menu-section">
+                <p class="menu-title">Navigation</p>
+                <a class="side-link @(currentController == "home" && currentAction == "index" ? "active" : string.Empty)" asp-controller="Home" asp-action="Index"><span class="side-link-text">Tableau de Bord</span></a>
+                <a class="side-link @(productsNavActive ? "active" : string.Empty)" asp-controller="Produits" asp-action="Index"><span class="side-link-text">Produits</span></a>
+            </div>
+
+            <div class="menu-section">
+                <p class="menu-title">Actions</p>
+                <a class="side-link @(currentController == "produits" && currentAction == "create" ? "active" : string.Empty)" asp-controller="Produits" asp-action="Create"><span class="side-link-text">Nouveau Produit</span></a>
+                <a class="side-link @(currentController == "produits" && currentAction == "advancedsearch" ? "active" : string.Empty)" asp-controller="Produits" asp-action="AdvancedSearch"><span class="side-link-text">Recherche Avancee</span></a>
+            </div>
+        </aside>
+
+        <div class="app-main">
+            <header class="app-header">
+                <button class="mobile-menu-btn btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu">
+                    Menu
+                </button>
+                <h1 class="header-title">@((ViewData["Title"] ?? "Tableau de bord").ToString())</h1>
+                <a class="btn btn-add" asp-controller="Produits" asp-action="Create">+ Ajouter</a>
+            </header>
+
+            <main class="page-content">
+                @RenderBody()
+            </main>
+
+            <footer class="app-footer">
+                &copy; @DateTime.Now.Year - BIBLIOGEST
+            </footer>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start mobile-nav" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="mobileMenuLabel">BiblioGest</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+        </div>
+        <div class="offcanvas-body">
+            <a class="side-link @(currentController == "home" && currentAction == "index" ? "active" : string.Empty)" asp-controller="Home" asp-action="Index">Tableau de Bord</a>
+            <a class="side-link @(productsNavActive ? "active" : string.Empty)" asp-controller="Produits" asp-action="Index">Produits</a>
+            <a class="side-link @(currentController == "produits" && currentAction == "create" ? "active" : string.Empty)" asp-controller="Produits" asp-action="Create">Nouveau Produit</a>
+            <a class="side-link @(currentController == "produits" && currentAction == "advancedsearch" ? "active" : string.Empty)" asp-controller="Produits" asp-action="AdvancedSearch">Recherche Avancee</a>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

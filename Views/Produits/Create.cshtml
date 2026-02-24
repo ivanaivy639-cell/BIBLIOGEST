@@ -1,0 +1,85 @@
+@model GestionProduits.Models.ProductCreateViewModel
+@{
+    ViewData["Title"] = "Ajouter un Produit";
+    ViewData["BodyClass"] = "create-modal-page";
+}
+
+<section class="product-modal-wrap">
+    <article class="product-modal-card">
+        <header class="product-modal-header">
+            <h2><span class="modal-title-icon">+</span> Ajouter un Produit</h2>
+            <a asp-action="Index" class="modal-close-btn" aria-label="Fermer">x</a>
+        </header>
+
+        <form asp-action="Create" method="post">
+            <div class="product-modal-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                <div class="product-form-grid">
+                    <div class="field-block">
+                        <label asp-for="Nom" class="form-label"></label>
+                        <input asp-for="Nom" class="form-control" />
+                        <span asp-validation-for="Nom" class="text-danger"></span>
+                    </div>
+                    <div class="field-block">
+                        <label asp-for="Auteur" class="form-label"></label>
+                        <input asp-for="Auteur" class="form-control" />
+                        <span asp-validation-for="Auteur" class="text-danger"></span>
+                    </div>
+
+                    <div class="field-block">
+                        <label asp-for="ISBN" class="form-label"></label>
+                        <input asp-for="ISBN" class="form-control" placeholder="978-X-XXXX-XXXX-X" />
+                        <span asp-validation-for="ISBN" class="text-danger"></span>
+                    </div>
+                    <div class="field-block">
+                        <label asp-for="Prix" class="form-label"></label>
+                        <input asp-for="Prix" class="form-control" type="number" min="0" step="1" />
+                        <span asp-validation-for="Prix" class="text-danger"></span>
+                    </div>
+
+                    <div class="field-block">
+                        <label asp-for="Categorie" class="form-label"></label>
+                        <input asp-for="Categorie" list="categoriesList" class="form-control" placeholder="Selectionner..." />
+                        <datalist id="categoriesList">
+                            @if (Model.Categories is not null)
+                            {
+                                foreach (var c in Model.Categories)
+                                {
+                                    <option value="@c.Value">@c.Text</option>
+                                }
+                            }
+                        </datalist>
+                        <span asp-validation-for="Categorie" class="text-danger"></span>
+                    </div>
+                    <div class="field-block">
+                        <label asp-for="QuantiteStock" class="form-label"></label>
+                        <input asp-for="QuantiteStock" class="form-control" />
+                        <span asp-validation-for="QuantiteStock" class="text-danger"></span>
+                    </div>
+
+                    <div class="field-block field-full">
+                        <label asp-for="Fournisseur" class="form-label"></label>
+                        <input asp-for="Fournisseur" class="form-control" />
+                        <span asp-validation-for="Fournisseur" class="text-danger"></span>
+                    </div>
+
+                    <div class="field-block field-full">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control modal-textarea"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="product-modal-footer">
+                <a asp-action="Index" class="btn btn-outline-light">Annuler</a>
+                <button type="submit" class="btn btn-secondary">Enregistrer</button>
+            </footer>
+        </form>
+    </article>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

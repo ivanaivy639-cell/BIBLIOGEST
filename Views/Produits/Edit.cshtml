@@ -1,0 +1,68 @@
+@model GestionProduits.Models.ProductEditViewModel
+@{
+    ViewData["Title"] = "Modifier un produit";
+}
+
+<h1>Modifier un produit</h1>
+
+<form asp-action="Edit" method="post">
+    <input asp-for="Id" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Nom" class="form-label"></label>
+        <input asp-for="Nom" class="form-control" />
+        <span asp-validation-for="Nom" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Auteur" class="form-label"></label>
+        <input asp-for="Auteur" class="form-control" />
+        <span asp-validation-for="Auteur" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ISBN" class="form-label"></label>
+        <input asp-for="ISBN" class="form-control" />
+        <span asp-validation-for="ISBN" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Prix" class="form-label"></label>
+        <input asp-for="Prix" class="form-control" type="number" min="0" step="1" />
+        <span asp-validation-for="Prix" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Categorie" class="form-label"></label>
+        <input asp-for="Categorie" list="categoriesList" class="form-control" />
+        <datalist id="categoriesList">
+            @if (Model.Categories is not null)
+            {
+                foreach (var c in Model.Categories)
+                {
+                    <option value="@c.Value">@c.Text</option>
+                }
+            }
+        </datalist>
+        <span asp-validation-for="Categorie" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="QuantiteStock" class="form-label"></label>
+        <input asp-for="QuantiteStock" class="form-control" />
+        <span asp-validation-for="QuantiteStock" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Fournisseur" class="form-label"></label>
+        <input asp-for="Fournisseur" class="form-control" />
+        <span asp-validation-for="Fournisseur" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Mettre a jour</button>
+    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

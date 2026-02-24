@@ -1,0 +1,35 @@
+@model GestionProduits.Models.Product
+@{
+    ViewData["Title"] = "Details du produit";
+}
+
+<h1>Details du produit</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Nom</dt>
+    <dd class="col-sm-9">@Model.Nom</dd>
+
+    <dt class="col-sm-3">Auteur</dt>
+    <dd class="col-sm-9">@Model.Auteur</dd>
+
+    <dt class="col-sm-3">ISBN</dt>
+    <dd class="col-sm-9">@Model.ISBN</dd>
+
+    <dt class="col-sm-3">Prix</dt>
+    <dd class="col-sm-9">@Model.Prix.ToString("N0") FCFA</dd>
+
+    <dt class="col-sm-3">Categorie</dt>
+    <dd class="col-sm-9">@Model.Categorie</dd>
+
+    <dt class="col-sm-3">Stock</dt>
+    <dd class="col-sm-9">@Model.QuantiteStock (@Model.StatutStock)</dd>
+
+    <dt class="col-sm-3">Fournisseur</dt>
+    <dd class="col-sm-9">@Model.Fournisseur</dd>
+
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Modifier</a>
+<a asp-action="Index" class="btn btn-secondary">Retour</a>
